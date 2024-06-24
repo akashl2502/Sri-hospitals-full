@@ -1,7 +1,6 @@
-const Blog = require("../models/blogModel");
+const Images = require("../models/imagesModel");
 
-const createBlog = async (req, res) => {
-  const { title, description } = req.body;
+const createImages = async (req, res) => {
   const image = req.file
     ? {
         data: req.file.buffer,
@@ -10,9 +9,7 @@ const createBlog = async (req, res) => {
     : null;
   console.log(image);
   // Create a new blog document
-  const newBlog = new Blog({
-    title,
-    description,
+  const newBlog = new Images({
     image,
   });
 
@@ -26,13 +23,11 @@ const createBlog = async (req, res) => {
   }
 };
 
-const getBlogs = async (req, res) => {
+const getImages = async (req, res) => {
   try {
-    const blogs = await Blog.find({});
+    const blogs = await Images.find({});
     const blogsWithImage = blogs.map((blog) => ({
       _id: blog._id,
-      title: blog.title,
-      description: blog.description,
       image: blog.image
         ? `data:${blog.image.contentType};base64,${blog.image.data.toString(
             "base64"
@@ -46,19 +41,19 @@ const getBlogs = async (req, res) => {
   }
 };
 
-const deleteBlog = async (req, res) => {
+const deleteImages = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Blog.findByIdAndDelete(id);
-    res.json({ success: true, message: "Blog deleted successfully" });
+    await Images.findByIdAndDelete(id);
+    res.json({ success: true, message: "Image deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
 module.exports = {
-  createBlog,
-  getBlogs,
-  deleteBlog,
+  createImages,
+  getImages,
+  deleteImages,
 };
